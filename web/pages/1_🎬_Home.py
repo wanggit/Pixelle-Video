@@ -29,7 +29,7 @@ import streamlit as st
 from web.state.session import init_session_state, init_i18n, get_pixelle_video
 
 # Import components
-from web.components.header import render_header
+from web.components.navbar import render_top_navbar
 from web.components.settings import render_advanced_settings
 from web.components.faq import render_faq_sidebar
 
@@ -47,43 +47,41 @@ def main():
     # Initialize session state and i18n
     init_session_state()
     init_i18n()
-    
-    # Render header (title + language selector)
-    render_header()
-    
-    # Render FAQ in sidebar
-    render_faq_sidebar()
-    
+
+    # Set current page for navigation
+    st.session_state.current_page = "pages/1_🎬_Home.py"
+
+    # Render top navigation bar
+    render_top_navbar()
+
     # Initialize Pixelle-Video
     pixelle_video = get_pixelle_video()
-    
-    # Render system configuration (LLM + ComfyUI)
+
+    # Main content area
     render_advanced_settings()
-    
+
     # ========================================================================
     # Pipeline Selection & Delegation
     # ========================================================================
     from web.pipelines import get_all_pipeline_uis
-    
+
     # Get all registered pipelines
     pipelines = get_all_pipeline_uis()
-    
+
     # Use Tabs for pipeline selection
-    # Note: st.tabs returns a list of containers, one for each tab
     tab_labels = [f"{p.icon} {p.display_name}" for p in pipelines]
     tabs = st.tabs(tab_labels)
-    
+
     # Render each pipeline in its corresponding tab
     for i, pipeline in enumerate(pipelines):
         with tabs[i]:
             # Show description if available
             if pipeline.description:
                 st.caption(pipeline.description)
-            
+
             # Delegate rendering
             pipeline.render(pixelle_video)
 
 
 if __name__ == "__main__":
     main()
-

@@ -29,7 +29,7 @@ import streamlit as st
 from loguru import logger
 
 from web.state.session import init_session_state, init_i18n, get_pixelle_video
-from web.components.header import render_header
+from web.components.navbar import render_top_navbar
 from web.i18n import tr
 from web.utils.async_helpers import run_async
 
@@ -377,9 +377,12 @@ def main():
     # Initialize
     init_session_state()
     init_i18n()
-    
-    # Render header
-    render_header()
+
+    # Set current page for navigation
+    st.session_state.current_page = "pages/2_📚_History.py"
+
+    # Render top navigation bar
+    render_top_navbar()
     
     # Initialize Pixelle-Video
     pixelle_video = get_pixelle_video()
