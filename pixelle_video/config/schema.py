@@ -42,7 +42,12 @@ class TTSSubConfig(BaseModel):
     inference_mode: str = Field(default="local", description="TTS inference mode: 'local' or 'comfyui'")
     local: TTSLocalConfig = Field(default_factory=TTSLocalConfig, description="Local TTS (Edge TTS) configuration")
     comfyui: TTSComfyUIConfig = Field(default_factory=TTSComfyUIConfig, description="ComfyUI TTS configuration")
-    
+
+    @property
+    def available(self) -> bool:
+        """Check if TTS workflows are available"""
+        return self.inference_mode == "local" or self.comfyui.default_workflow is not None
+
     # Backward compatibility: keep default_workflow at top level
     @property
     def default_workflow(self) -> Optional[str]:
@@ -58,6 +63,11 @@ class ImageSubConfig(BaseModel):
         description="Prompt prefix for all image generation"
     )
 
+    @property
+    def available(self) -> bool:
+        """Check if image workflows are available"""
+        return self.default_workflow is not None
+
 
 class VideoSubConfig(BaseModel):
     """Video-specific configuration (under comfyui.video)"""
@@ -66,6 +76,11 @@ class VideoSubConfig(BaseModel):
         default="Minimalist black-and-white matchstick figure style illustration, clean lines, simple sketch style",
         description="Prompt prefix for all video generation"
     )
+
+    @property
+    def available(self) -> bool:
+        """Check if video workflows are available"""
+        return self.default_workflow is not None
 
 
 class ComfyUIConfig(BaseModel):

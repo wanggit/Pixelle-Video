@@ -55,6 +55,11 @@ from api.routers import (
     resources_router,
     frame_router,
 )
+from api.routers.config import router as config_router
+from api.routers.history import router as history_router
+from api.routers.upload import router as upload_router
+from api.routers.capabilities import router as capabilities_router
+from api.routers.stream import router as stream_router
 
 
 @asynccontextmanager
@@ -133,6 +138,11 @@ app.include_router(tasks_router, prefix=api_config.api_prefix)
 app.include_router(files_router, prefix=api_config.api_prefix)
 app.include_router(resources_router, prefix=api_config.api_prefix)
 app.include_router(frame_router, prefix=api_config.api_prefix)
+app.include_router(config_router)
+app.include_router(history_router)
+app.include_router(upload_router)
+app.include_router(capabilities_router)
+app.include_router(stream_router)
 
 
 @app.get("/")
@@ -153,6 +163,10 @@ async def root():
             "files": f"{api_config.api_prefix}/files",
             "resources": f"{api_config.api_prefix}/resources",
             "frame": f"{api_config.api_prefix}/frame",
+            "config": "/api/config",
+            "history": "/api/history",
+            "upload": f"{api_config.api_prefix}/files/upload",
+            "capabilities": f"{api_config.api_prefix}/capabilities",
         }
     }
 

@@ -1,0 +1,1 @@
+<template><div class="pipeline-panel"><h3>素材创作</h3><p class="panel-desc">上传素材，AI 自动生成视频</p><el-alert type="info" :closable="false">素材创作面板 - Phase 4 实现中</el-alert></div></template>

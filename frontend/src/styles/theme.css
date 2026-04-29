@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-body text-text bg-background;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-heading;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-card rounded-xl border border-border shadow-md p-5 transition-shadow duration-200;
+  }
+
+  .card:hover {
+    @apply shadow-lg;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white rounded-lg font-medium transition-all duration-200 hover:bg-primary-hover hover:shadow-md;
+  }
+
+  .btn-cta {
+    @apply bg-cta text-text rounded-lg font-medium transition-all duration-200 hover:bg-cta-hover hover:shadow-md;
+  }
+
+  .input-field {
+    @apply rounded-lg border-border focus:border-primary focus:ring-2 focus:ring-primary/15 transition-all duration-200;
+  }
+}

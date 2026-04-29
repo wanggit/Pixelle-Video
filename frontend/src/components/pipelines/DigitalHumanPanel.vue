@@ -1,0 +1,1 @@
+<template><div class="pipeline-panel"><h3>数字人</h3><p class="panel-desc">创建数字人视频，支持商品介绍</p><el-alert type="info" :closable="false">数字人面板 - Phase 4 实现中</el-alert></div></template>

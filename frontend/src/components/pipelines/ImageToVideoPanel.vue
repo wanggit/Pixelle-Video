@@ -1,0 +1,1 @@
+<template><div class="pipeline-panel"><h3>图生视频</h3><p class="panel-desc">上传图片，AI 生成动态视频</p><el-alert type="info" :closable="false">图生视频面板 - Phase 4 实现中</el-alert></div></template>

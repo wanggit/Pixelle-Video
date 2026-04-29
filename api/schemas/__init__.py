@@ -31,6 +31,26 @@ from api.schemas.video import (
     VideoGenerateResponse,
     VideoGenerateAsyncResponse,
 )
+from api.schemas.config import (
+    LLMConfigRequest,
+    ComfyUIConfigRequest,
+    LLMTestRequest,
+    ComfyUITestRequest,
+    LLMTestResponse,
+    ComfyUITestResponse,
+    ConfigResponse,
+    SaveConfigResponse,
+    LLMModelsResponse,
+)
+from api.schemas.history import (
+    HistoryTaskSummary,
+    HistoryListResponse,
+    HistoryTaskDetail,
+    HistoryStatisticsResponse,
+    DuplicateTaskResponse,
+    DeleteTaskResponse,
+)
+from api.schemas.upload import FileUploadResponse
 
 __all__ = [
     # Base
@@ -56,5 +76,24 @@ __all__ = [
     "VideoGenerateRequest",
     "VideoGenerateResponse",
     "VideoGenerateAsyncResponse",
+    # Config
+    "LLMConfigRequest",
+    "ComfyUIConfigRequest",
+    "LLMTestRequest",
+    "ComfyUITestRequest",
+    "LLMTestResponse",
+    "ComfyUITestResponse",
+    "ConfigResponse",
+    "SaveConfigResponse",
+    "LLMModelsResponse",
+    # History
+    "HistoryTaskSummary",
+    "HistoryListResponse",
+    "HistoryTaskDetail",
+    "HistoryStatisticsResponse",
+    "DuplicateTaskResponse",
+    "DeleteTaskResponse",
+    # Upload
+    "FileUploadResponse",
 ]
 

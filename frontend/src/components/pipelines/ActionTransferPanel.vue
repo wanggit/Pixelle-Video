@@ -1,0 +1,1 @@
+<template><div class="pipeline-panel"><h3>动作迁移</h3><p class="panel-desc">参考视频动作，迁移到角色图片</p><el-alert type="info" :closable="false">动作迁移面板 - Phase 4 实现中</el-alert></div></template>

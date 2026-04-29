@@ -73,7 +73,7 @@ services:
     networks:
       - pixelle-network
 
-  # Web UI Service - Streamlit frontend
+  # Web UI Service - Streamlit frontend (legacy, kept for backward compatibility)
   web:
     build:
       context: .
@@ -116,6 +116,26 @@ services:
         max-file: "3"
     networks:
       - pixelle-network
+
+  # Frontend Service - Vue 3 SPA (new frontend)
+  frontend:
+    image: nginx:alpine
+    container_name: pixelle-video-frontend
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "3000:80"
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html:ro
+      - ./frontend/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    environment:
+      - TZ=Asia/Shanghai
+    restart: unless-stopped
+    networks:
+      - pixelle-network
+    profiles:
+      - frontend
 
 networks:
   pixelle-network:
