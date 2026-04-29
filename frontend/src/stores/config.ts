@@ -55,7 +55,7 @@ export const useConfigStore = defineStore('config', () => {
   }
 
   async function listModels() {
-    const resp = await configApi.listModels()
+    const resp = await configApi.listModels() as { models?: string[] }
     return resp.models || []
   }
 

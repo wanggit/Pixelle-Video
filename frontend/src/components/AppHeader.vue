@@ -52,7 +52,6 @@ function t(key: string): string {
     'nav.home': { 'zh-CN': '首页', 'en-US': 'Home' },
     'nav.history': { 'zh-CN': '历史记录', 'en-US': 'History' },
   }
-  const parts = key.split('.')
   const obj = translations[key]
   return obj?.[appStore.language] || key
 }

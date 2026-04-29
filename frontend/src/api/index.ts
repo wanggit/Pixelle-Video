@@ -1,28 +1,16 @@
 import axios, { AxiosInstance, AxiosError } from 'axios'
 
-const apiClient: AxiosInstance = axios.create({
+const baseClient: AxiosInstance = axios.create({
   baseURL: '',
-  timeout: 600000, // 10 minutes for video generation
+  timeout: 600000,
   headers: {
     'Content-Type': 'application/json',
   },
 })
 
-// Request interceptor
-apiClient.interceptors.request.use(
-  (config) => {
-    return config
-  },
-  (error) => {
-    return Promise.reject(error)
-  }
-)
-
-// Response interceptor
-apiClient.interceptors.response.use(
-  (response) => {
-    return response.data
-  },
+// Response interceptor - unwrap .data so callers get typed response directly
+baseClient.interceptors.response.use(
+  (response) => response.data,
   (error: AxiosError) => {
     const message = error.response?.data
       ? (error.response.data as { detail?: string }).detail || error.message
@@ -32,4 +20,13 @@ apiClient.interceptors.response.use(
   }
 )
 
-export default apiClient
+// Typed wrapper that matches the unwrapped return behavior
+const api = baseClient as unknown as {
+  get<T>(url: string, config?: Record<string, unknown>): Promise<T>
+  post<T = unknown>(url: string, data?: unknown, config?: Record<string, unknown>): Promise<T>
+  put<T = unknown>(url: string, data?: unknown, config?: Record<string, unknown>): Promise<T>
+  delete<T = unknown>(url: string, config?: Record<string, unknown>): Promise<T>
+  patch<T = unknown>(url: string, data?: unknown, config?: Record<string, unknown>): Promise<T>
+}
+
+export default api
