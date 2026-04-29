@@ -5,7 +5,7 @@
 export interface VideoGenerateRequest {
   text: string
   mode: 'generate' | 'fixed'
-  title: string
+  title?: string
   n_scenes: number
   tts_workflow?: string
   ref_audio?: string
@@ -14,13 +14,17 @@ export interface VideoGenerateRequest {
   max_narration_words?: number
   min_image_prompt_words?: number
   max_image_prompt_words?: number
-  media_workflow: string
-  video_fps: number
+  media_workflow?: string
+  video_fps?: number
   frame_template?: string
   prompt_prefix?: string
   bgm_path?: string
   bgm_volume?: number
   template_params?: Record<string, unknown>
+  tts_inference_mode?: 'local' | 'comfyui'
+  tts_speed?: number
+  tts_voice?: string
+  split_mode?: 'paragraph' | 'line' | 'sentence'
 }
 
 export interface VideoGenerateResponse {
@@ -248,4 +252,87 @@ export interface ProgressEvent {
   step?: string
   action?: string
   extra_info?: string
+}
+
+// ==========================================
+// Quick Create Pipeline Types
+// ==========================================
+
+export interface QuickCreateRequest {
+  text: string
+  mode: 'generate' | 'fixed'
+  title?: string
+  n_scenes: number
+  split_mode?: 'paragraph' | 'line' | 'sentence'
+  bgm_path?: string
+  bgm_volume: number
+  tts_inference_mode: 'local' | 'comfyui'
+  tts_voice?: string
+  tts_speed?: number
+  tts_workflow?: string
+  ref_audio?: string
+  media_workflow: string
+  frame_template?: string
+  prompt_prefix?: string
+  template_params?: Record<string, unknown>
+  media_width?: number
+  media_height?: number
+}
+
+// ==========================================
+// Custom Media Pipeline Types
+// ==========================================
+
+export interface CustomMediaRequest {
+  assets: string[]
+  video_title?: string
+  intent?: string
+  bgm_path?: string
+  bgm_volume: number
+  duration: number
+  source: 'runninghub' | 'selfhost'
+  voice_id?: string
+  tts_speed?: number
+}
+
+// ==========================================
+// Image to Video Pipeline Types
+// ==========================================
+
+export interface ImageToVideoRequest {
+  image: string
+  prompt: string
+  workflow: string
+  source: 'runninghub' | 'selfhost'
+}
+
+// ==========================================
+// Action Transfer Pipeline Types
+// ==========================================
+
+export interface ActionTransferRequest {
+  video: string
+  image: string
+  prompt: string
+  workflow: string
+  source: 'runninghub' | 'selfhost'
+  duration: number
+}
+
+// ==========================================
+// Digital Human Pipeline Types
+// ==========================================
+
+export interface DigitalHumanRequest {
+  character_assets: string[]
+  goods_assets?: string[]
+  goods_title?: string
+  goods_text: string
+  mode: 'digital' | 'customize'
+  workflow_path: Record<string, string>
+  tts_inference_mode: 'local' | 'comfyui'
+  tts_voice?: string
+  tts_speed?: number
+  tts_workflow?: string
+  ref_audio?: string
 }

@@ -8,6 +8,17 @@ export const resourceApi = {
     image: () => api.get<WorkflowListResponse>('/api/resources/workflows/image'),
   },
 
+  getWorkflowsByPrefix: async (prefix: string) => {
+    // Fetch all workflow types and filter by prefix
+    const [tts, media, image] = await Promise.all([
+      resourceApi.workflows.tts(),
+      resourceApi.workflows.media(),
+      resourceApi.workflows.image(),
+    ])
+    const all = [...(tts.workflows || []), ...(media.workflows || []), ...(image.workflows || [])]
+    return all.filter(w => w.name.startsWith(prefix))
+  },
+
   templates: () =>
     api.get<TemplateListResponse>('/api/resources/templates'),
 
