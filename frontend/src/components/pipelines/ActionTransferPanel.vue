@@ -135,6 +135,8 @@ import { ElMessage } from 'element-plus'
 import { UploadFilled, Download } from '@element-plus/icons-vue'
 import { uploadApi } from '@/api/upload'
 import { resourceApi } from '@/api/resource'
+import { pipelineApi } from '@/api/pipeline'
+import { taskApi } from '@/api/task'
 import type { WorkflowInfo, FileUploadResponse } from '@/types'
 
 interface UploadedFile {
@@ -258,16 +260,14 @@ async function handleGenerate() {
   generating.value = true
   resultVideoUrl.value = ''
 
-  ElMessage.info('动作迁移后端接口对接中，当前使用快速创作接口演示')
-
   try {
-    const { videoApi } = await import('@/api/video')
-    const resp = await videoApi.generateAsync({
-      text: form.value.prompt || '动作迁移视频',
-      mode: 'generate',
-      n_scenes: 3,
-      media_workflow: form.value.workflow || '',
-      tts_inference_mode: 'local',
+    const resp = await pipelineApi.actionTransfer({
+      video: uploadedVideos.value[0].path,
+      image: uploadedImages.value[0].path,
+      prompt: form.value.prompt || '',
+      workflow: form.value.workflow,
+      source: 'runninghub',
+      duration: 10,
     })
 
     if (!resp.success) {
@@ -285,7 +285,6 @@ async function handleGenerate() {
 
 async function fetchTaskResult(taskId: string) {
   try {
-    const { taskApi } = await import('@/api/task')
     const task = await taskApi.detail(taskId)
     if (task.result?.video_url) {
       resultVideoUrl.value = task.result.video_url as string

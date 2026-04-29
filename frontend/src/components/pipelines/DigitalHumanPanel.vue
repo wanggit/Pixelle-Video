@@ -202,6 +202,8 @@ import { ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UploadFilled, Download } from '@element-plus/icons-vue'
 import { uploadApi } from '@/api/upload'
+import { pipelineApi } from '@/api/pipeline'
+import { taskApi } from '@/api/task'
 import type { FileUploadResponse } from '@/types'
 
 interface UploadedImage {
@@ -338,18 +340,38 @@ async function handleGenerate() {
   generating.value = true
   resultVideoUrl.value = ''
 
-  ElMessage.info('数字人后端接口对接中，当前使用快速创作接口演示')
+  const source = form.value.workflowSource
+  const wt = form.value.workflowType
+
+  // Build workflow paths based on source and type
+  const wfBase = source === 'runninghub'
+    ? `runninghub/digital_${wt === 'digital_image' ? 'image' : wt === 'digital_combination' ? 'combination' : 'customize'}.json`
+    : `selfhost/digital_${wt === 'digital_image' ? 'image' : wt === 'digital_combination' ? 'combination' : 'customize'}.json`
+
+  const workflowPath: Record<string, string> = {}
+  if (form.value.mode === 'customize') {
+    workflowPath.second_workflow_path = wfBase
+  } else {
+    workflowPath.first_workflow_path = wfBase
+    workflowPath.second_workflow_path = source === 'runninghub' ? 'runninghub/digital_lipsync.json' : 'selfhost/digital_lipsync.json'
+    workflowPath.third_workflow_path = source === 'runninghub' ? 'runninghub/digital_combine.json' : 'selfhost/digital_combine.json'
+  }
 
   try {
-    const { videoApi } = await import('@/api/video')
-    const resp = await videoApi.generateAsync({
-      text: form.value.goodsText,
-      mode: 'generate',
-      n_scenes: 3,
-      media_workflow: '',
+    const resp = await pipelineApi.digitalHuman({
+      character_assets: characterImages.value.map(img => img.path),
+      goods_assets: form.value.mode === 'digital' && goodsImages.value.length > 0
+        ? goodsImages.value.map(img => img.path)
+        : undefined,
+      goods_title: form.value.mode === 'digital' ? form.value.goodsTitle : undefined,
+      goods_text: form.value.goodsText,
+      mode: form.value.mode,
+      workflow_path: workflowPath,
       tts_inference_mode: form.value.ttsMode,
       tts_voice: form.value.ttsMode === 'local' ? form.value.ttsVoice : undefined,
       tts_speed: form.value.ttsSpeed,
+      tts_workflow: form.value.ttsMode === 'comfyui' ? 'runninghub/tts_index2.json' : undefined,
+      ref_audio: form.value.refAudio || undefined,
     })
 
     if (!resp.success) {
@@ -367,7 +389,6 @@ async function handleGenerate() {
 
 async function fetchTaskResult(taskId: string) {
   try {
-    const { taskApi } = await import('@/api/task')
     const task = await taskApi.detail(taskId)
     if (task.result?.video_url) {
       resultVideoUrl.value = task.result.video_url as string

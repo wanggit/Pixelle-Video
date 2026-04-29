@@ -60,6 +60,7 @@ from api.routers.history import router as history_router
 from api.routers.upload import router as upload_router
 from api.routers.capabilities import router as capabilities_router
 from api.routers.stream import router as stream_router
+from api.routers.pipelines import router as pipelines_router
 
 
 @asynccontextmanager
@@ -143,6 +144,7 @@ app.include_router(history_router)
 app.include_router(upload_router)
 app.include_router(capabilities_router)
 app.include_router(stream_router)
+app.include_router(pipelines_router, prefix=api_config.api_prefix)
 
 
 @app.get("/")
@@ -167,6 +169,7 @@ async def root():
             "history": "/api/history",
             "upload": f"{api_config.api_prefix}/files/upload",
             "capabilities": f"{api_config.api_prefix}/capabilities",
+            "pipelines": f"{api_config.api_prefix}/pipelines",
         }
     }
 

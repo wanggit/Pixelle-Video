@@ -336,3 +336,31 @@ export interface DigitalHumanRequest {
   tts_workflow?: string
   ref_audio?: string
 }
+
+// ==========================================
+// Pipeline Async Response Types
+// ==========================================
+
+export interface CustomMediaAsyncResponse {
+  success: boolean
+  message: string
+  task_id: string
+}
+
+export interface ImageToVideoAsyncResponse {
+  success: boolean
+  message: string
+  task_id: string
+}
+
+export interface ActionTransferAsyncResponse {
+  success: boolean
+  message: string
+  task_id: string
+}
+
+export interface DigitalHumanAsyncResponse {
+  success: boolean
+  message: string
+  task_id: string
+}

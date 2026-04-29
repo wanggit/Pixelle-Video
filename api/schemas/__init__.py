@@ -51,6 +51,16 @@ from api.schemas.history import (
     DeleteTaskResponse,
 )
 from api.schemas.upload import FileUploadResponse
+from api.schemas.pipelines import (
+    CustomMediaRequest,
+    CustomMediaAsyncResponse,
+    ImageToVideoRequest,
+    ImageToVideoAsyncResponse,
+    ActionTransferRequest,
+    ActionTransferAsyncResponse,
+    DigitalHumanRequest,
+    DigitalHumanAsyncResponse,
+)
 
 __all__ = [
     # Base
@@ -95,5 +105,14 @@ __all__ = [
     "DeleteTaskResponse",
     # Upload
     "FileUploadResponse",
+    # Pipelines
+    "CustomMediaRequest",
+    "CustomMediaAsyncResponse",
+    "ImageToVideoRequest",
+    "ImageToVideoAsyncResponse",
+    "ActionTransferRequest",
+    "ActionTransferAsyncResponse",
+    "DigitalHumanRequest",
+    "DigitalHumanAsyncResponse",
 ]
 

@@ -139,6 +139,8 @@ import { ref, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { UploadFilled, Download } from '@element-plus/icons-vue'
 import { uploadApi } from '@/api/upload'
+import { pipelineApi } from '@/api/pipeline'
+import { taskApi } from '@/api/task'
 import { resourceApi } from '@/api/resource'
 import type { BGMInfo, FileUploadResponse } from '@/types'
 
@@ -263,21 +265,17 @@ async function handleGenerate() {
   generating.value = true
   resultVideoUrl.value = ''
 
-  // For now, show a placeholder message since the backend needs a dedicated endpoint
-  ElMessage.info('素材创作后端接口对接中，当前使用快速创作接口演示')
-
   try {
-    const { videoApi } = await import('@/api/video')
-    const resp = await videoApi.generateAsync({
-      text: form.value.intent || '基于素材生成视频',
-      mode: 'generate',
-      n_scenes: 3,
+    const resp = await pipelineApi.customMedia({
+      assets: uploadedFiles.value.map(f => f.path),
+      video_title: form.value.videoTitle || undefined,
+      intent: form.value.intent || undefined,
+      duration: form.value.duration,
+      source: form.value.source,
+      voice_id: form.value.voiceId || undefined,
+      tts_speed: form.value.ttsSpeed,
       bgm_path: form.value.bgmPath || undefined,
       bgm_volume: form.value.bgmVolume,
-      tts_inference_mode: 'local',
-      tts_voice: form.value.voiceId || undefined,
-      tts_speed: form.value.ttsSpeed,
-      media_workflow: '',
     })
 
     if (!resp.success) {
@@ -295,7 +293,6 @@ async function handleGenerate() {
 
 async function fetchTaskResult(taskId: string) {
   try {
-    const { taskApi } = await import('@/api/task')
     const task = await taskApi.detail(taskId)
     if (task.result?.video_url) {
       resultVideoUrl.value = task.result.video_url as string
